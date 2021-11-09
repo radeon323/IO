@@ -43,4 +43,32 @@ public class FileManagerTest {
         assertTrue(fileTo.isDirectory());
         fileTo.delete();
     }
+
+    @Test
+    public void testMoveFile() throws IOException {
+        String from = "d:/JAVA/io/CopyFrom1/story.txt";
+        String to = "d:/JAVA/io/CopyTo/story.txt";
+        File fileFrom = new File(from);
+        File fileTo = new File(to);
+        assertTrue(fileFrom.isFile());
+        assertFalse(fileTo.exists());
+        FileManager.move(from, to);
+        assertTrue(fileTo.exists());
+        assertFalse(fileFrom.exists());
+        fileTo.delete();
+    }
+
+    @Test
+    public void testMoveFolder() throws IOException {
+        String from = "d:/JAVA/io/CopyFrom1/story/";
+        String to = "d:/JAVA/io/CopyTo/story/";
+        File fileFrom = new File(from);
+        File fileTo = new File(to);
+        assertTrue(fileFrom.isDirectory());
+        assertFalse(fileTo.exists());
+        FileManager.move(from, to);
+        assertTrue(fileTo.exists());
+        assertFalse(fileFrom.exists());
+        fileTo.delete();
+    }
 }

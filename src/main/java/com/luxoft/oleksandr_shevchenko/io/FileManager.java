@@ -71,7 +71,14 @@ public class FileManager {
 
 //    public static void move(String from, String to) - метод по перемещению папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
-        public static void move(String from, String to) {
-
+        public static void move(String from, String to) throws IOException {
+            copy(from, to);
+            File path = new File(from);
+            File[] files = path.listFiles();
+            for (File file : files) {
+                System.out.println(file);
+                file.delete();
+            }
+            path.delete();
         }
 }
