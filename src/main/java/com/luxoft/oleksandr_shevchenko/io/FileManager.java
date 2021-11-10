@@ -1,7 +1,6 @@
 package com.luxoft.oleksandr_shevchenko.io;
 
 import java.io.*;
-import java.util.StringJoiner;
 
 public class FileManager {
 
@@ -42,43 +41,75 @@ public class FileManager {
         public static void copy(String from, String to) throws IOException {
             File path = new File(from);
             if (path.isFile()) {
-                FileInputStream fileInputStream = new FileInputStream(from);
-                FileOutputStream fileOutputStream = new FileOutputStream(to);
-
-                int bufSize;
-                byte[] buf = new byte[512];
-                while ((bufSize = fileInputStream.read(buf)) > 0) {
-                    fileOutputStream.write(buf, 0, bufSize);
-                }
-                fileInputStream.close();
-                fileOutputStream.close();
-
+                copyFile(from, to);
+            } else if (path.isDirectory()){
+                copyFolder(from, to);
             }
-            else if (path.isDirectory()){
-                File pathDir = new File(to);
-                pathDir.mkdir();
+        }
 
-                File[] files = path.listFiles();
-                if (files.length != 0) {
-                    for (File file : files) {
-                        copy(from + file.getName(), to + file.getName());
-//                        from = from + file.getName();
-//                        to = to + file.getName();
-                    }
+        public static void copyFile(String from, String to) throws IOException {
+            FileInputStream fileInputStream = new FileInputStream(from);
+            FileOutputStream fileOutputStream = new FileOutputStream(to);
+
+            int bufSize;
+            byte[] buf = new byte[512];
+            while ((bufSize = fileInputStream.read(buf)) > 0) {
+                fileOutputStream.write(buf, 0, bufSize);
+            }
+
+            fileInputStream.close();
+            fileOutputStream.close();
+        }
+
+        public static void copyFolder(String from, String to) throws IOException {
+            File pathFrom = new File(from);
+            File pathTo = new File(to);
+            pathTo.mkdir();
+
+            StringBuilder fromBuilder = new StringBuilder(from);
+            StringBuilder toBuilder = new StringBuilder(to);
+
+            File[] files = pathFrom.listFiles();
+            if (files.length != 0) {
+
+                for (File file : files) {
+                    fromBuilder.append("/").append(file.getName());
+                    toBuilder.append("/").append(file.getName());
+                    copy(fromBuilder.toString(), toBuilder.toString());
                 }
             }
         }
+
+
 
 //    public static void move(String from, String to) - метод по перемещению папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
         public static void move(String from, String to) throws IOException {
-            copy(from, to);
-            File path = new File(from);
-            File[] files = path.listFiles();
-            for (File file : files) {
-                System.out.println(file);
+            File pathFrom = new File(from);
+            if (pathFrom.isFile()) {
+                copyFile(from, to);
+                pathFrom.delete();
+            } else if (pathFrom.isDirectory()){
+                copyFolder(from, to);
+                deleteDirWithFiles(from);
+                pathFrom.delete();
+            }
+        }
+
+    public static void deleteDirWithFiles(String dir) {
+        File path = new File(dir);
+        File[] files = path.listFiles();
+        for (File file : files) {
+            if(file.isDirectory()) {
+                deleteDirWithFiles(file.getPath());
                 file.delete();
             }
-            path.delete();
+            file.delete();
         }
+        path.delete();
+    }
+
+
+
+
 }

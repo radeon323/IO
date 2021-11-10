@@ -33,15 +33,15 @@ public class FileManagerTest {
 
     @Test
     public void testCopyFolder() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom/story/";
-        String to = "d:/JAVA/io/CopyTo/story/";
+        String from = "d:/JAVA/io/CopyFrom/story";
+        String to = "d:/JAVA/io/CopyTo/story";
         File fileFrom = new File(from);
         File fileTo = new File(to);
         assertTrue(fileFrom.isDirectory());
         assertFalse(fileTo.exists());
         FileManager.copy(from, to);
         assertTrue(fileTo.isDirectory());
-        fileTo.delete();
+        FileManager.deleteDirWithFiles(to);
     }
 
     @Test
@@ -60,8 +60,8 @@ public class FileManagerTest {
 
     @Test
     public void testMoveFolder() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom1/story/";
-        String to = "d:/JAVA/io/CopyTo/story/";
+        String from = "d:/JAVA/io/CopyFrom1/story";
+        String to = "d:/JAVA/io/CopyTo/story";
         File fileFrom = new File(from);
         File fileTo = new File(to);
         assertTrue(fileFrom.isDirectory());
@@ -69,6 +69,6 @@ public class FileManagerTest {
         FileManager.move(from, to);
         assertTrue(fileTo.exists());
         assertFalse(fileFrom.exists());
-        fileTo.delete();
+        FileManager.deleteDirWithFiles(from);
     }
 }
