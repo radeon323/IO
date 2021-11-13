@@ -1,6 +1,8 @@
 package com.luxoft.oleksandr_shevchenko.io;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileManager {
 
@@ -38,15 +40,22 @@ public class FileManager {
 //    public static void copy(String from, String to) - метод по копированию папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
         public static void copy(String from, String to) throws IOException {
-            File path = new File(from);
-            if (path.isFile()) {
+            File pathFrom = new File(from);
+            File pathTo = new File(to);
+            if (pathFrom.isDirectory()) {
+                if (!pathTo.exists()) {
+                    Files.createDirectories(Paths.get(to));
+                }
+            }
+            if (pathFrom.isFile()) {
                 copyFile(from, to);
-            } else if (path.isDirectory()){
+            } else if (pathFrom.isDirectory()){
                 copyFolder(from, to);
             }
         }
 
         static void copyFile(String from, String to) throws IOException {
+
             FileInputStream fileInputStream = new FileInputStream(from);
             FileOutputStream fileOutputStream = new FileOutputStream(to);
 
