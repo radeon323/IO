@@ -47,6 +47,7 @@ public class FileManager {
                     Files.createDirectories(Paths.get(to));
                 }
             }
+
             if (pathFrom.isFile()) {
                 copyFile(from, to);
             } else if (pathFrom.isDirectory()){
