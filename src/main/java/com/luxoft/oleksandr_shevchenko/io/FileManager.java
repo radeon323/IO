@@ -55,7 +55,6 @@ public class FileManager {
         }
 
         static void copyFile(String from, String to) throws IOException {
-
             FileInputStream fileInputStream = new FileInputStream(from);
             FileOutputStream fileOutputStream = new FileOutputStream(to);
 
@@ -64,7 +63,6 @@ public class FileManager {
             while ((bufSize = fileInputStream.read(buf)) > 0) {
                 fileOutputStream.write(buf, 0, bufSize);
             }
-
             fileInputStream.close();
             fileOutputStream.close();
         }
