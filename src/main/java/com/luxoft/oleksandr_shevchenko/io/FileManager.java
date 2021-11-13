@@ -37,7 +37,6 @@ public class FileManager {
 
 //    public static void copy(String from, String to) - метод по копированию папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
-    // працює тільки з першим рівнем вкладення, копіює вкладені файли і папки. Треба подумати над створенням імен папок і файлів для правильного копіювання
         public static void copy(String from, String to) throws IOException {
             File path = new File(from);
             if (path.isFile()) {
@@ -47,7 +46,7 @@ public class FileManager {
             }
         }
 
-        public static void copyFile(String from, String to) throws IOException {
+        static void copyFile(String from, String to) throws IOException {
             FileInputStream fileInputStream = new FileInputStream(from);
             FileOutputStream fileOutputStream = new FileOutputStream(to);
 
@@ -61,34 +60,28 @@ public class FileManager {
             fileOutputStream.close();
         }
 
-        public static void copyFolder(String from, String to) throws IOException {
+        static void copyFolder(String from, String to) throws IOException {
             File pathFrom = new File(from);
             File pathTo = new File(to);
-            pathTo.mkdir();
-
-            StringBuilder fromBuilder = new StringBuilder(from);
-            StringBuilder toBuilder = new StringBuilder(to);
-
+            if (!pathTo.exists()) {
+                pathTo.mkdir();
+            }
             File[] files = pathFrom.listFiles();
             if (files.length != 0) {
-
                 for (File file : files) {
-                    fromBuilder.append("/").append(file.getName());
-                    toBuilder.append("/").append(file.getName());
-                    copy(fromBuilder.toString(), toBuilder.toString());
+                    File fileFrom = new File(pathFrom, file.getName());
+                    File fileTo = new File(pathTo, file.getName());
+                    copy(fileFrom.toString(), fileTo.toString());
                 }
             }
         }
-
-
 
 //    public static void move(String from, String to) - метод по перемещению папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
         public static void move(String from, String to) throws IOException {
             File pathFrom = new File(from);
             if (pathFrom.isFile()) {
-                copyFile(from, to);
-                pathFrom.delete();
+                new File(from).renameTo(new File(to));
             } else if (pathFrom.isDirectory()){
                 copyFolder(from, to);
                 deleteDirWithFiles(from);
@@ -96,7 +89,7 @@ public class FileManager {
             }
         }
 
-    public static void deleteDirWithFiles(String dir) {
+    static void deleteDirWithFiles(String dir) {
         File path = new File(dir);
         File[] files = path.listFiles();
         for (File file : files) {
@@ -108,8 +101,6 @@ public class FileManager {
         }
         path.delete();
     }
-
-
 
 
 }

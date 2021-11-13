@@ -3,72 +3,73 @@ package com.luxoft.oleksandr_shevchenko.io;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileManagerTest {
 
+    private final String fromFolder = "src/main/resources/MoveFrom/story";
+    private final String toFolder = "src/main/resources/CopyTo/story";
+
+    private final String fromFile = "src/main/resources/MoveFrom/story.txt";
+    private final String toFile = "src/main/resources/CopyTo/story.txt";
+
     @Test
     public void testCountFiles(){
-        assertEquals(5, FileManager.countFiles("d:/JAVA/io/src/"));
+        assertEquals(3, FileManager.countFiles(fromFolder));
     }
 
     @Test
     public void testCountDirs(){
-        assertEquals(13, FileManager.countDirs("d:/JAVA/io/src/"));
+        assertEquals(2, FileManager.countDirs(fromFolder));
     }
 
     @Test
     public void testCopyFile() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom/story.txt";
-        String to = "d:/JAVA/io/CopyTo/story.txt";
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
+        File fileFrom = new File(fromFile);
+        File fileTo = new File(toFile);
         assertTrue(fileFrom.isFile());
         assertFalse(fileTo.exists());
-        FileManager.copy(from, to);
+        FileManager.copy(fromFile, toFile);
         assertTrue(fileTo.isFile());
         fileTo.delete();
     }
 
     @Test
     public void testCopyFolder() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom/story";
-        String to = "d:/JAVA/io/CopyTo/story";
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
+        File fileFrom = new File(fromFolder);
+        File fileTo = new File(toFolder);
         assertTrue(fileFrom.isDirectory());
         assertFalse(fileTo.exists());
-        FileManager.copy(from, to);
+        FileManager.copy(fromFolder, toFolder);
         assertTrue(fileTo.isDirectory());
-        FileManager.deleteDirWithFiles(to);
+        assertEquals(3, FileManager.countFiles(toFolder));
+        assertEquals(2, FileManager.countDirs(toFolder));
+        FileManager.deleteDirWithFiles(toFolder);
     }
 
     @Test
     public void testMoveFile() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom1/story.txt";
-        String to = "d:/JAVA/io/CopyTo/story.txt";
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
+        File fileFrom = new File(fromFile);
+        File fileTo = new File(toFile);
         assertTrue(fileFrom.isFile());
         assertFalse(fileTo.exists());
-        FileManager.move(from, to);
+        FileManager.move(fromFile, toFile);
         assertTrue(fileTo.exists());
         assertFalse(fileFrom.exists());
-        fileTo.delete();
+        FileManager.move(toFile, fromFile);
     }
 
     @Test
     public void testMoveFolder() throws IOException {
-        String from = "d:/JAVA/io/CopyFrom1/story";
-        String to = "d:/JAVA/io/CopyTo/story";
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
+        File fileFrom = new File(fromFolder);
+        File fileTo = new File(toFolder);
         assertTrue(fileFrom.isDirectory());
         assertFalse(fileTo.exists());
-        FileManager.move(from, to);
+        FileManager.move(fromFolder, toFolder);
         assertTrue(fileTo.exists());
         assertFalse(fileFrom.exists());
-        FileManager.deleteDirWithFiles(from);
+        assertEquals(3, FileManager.countFiles(toFolder));
+        assertEquals(2, FileManager.countDirs(toFolder));
+        FileManager.move(toFolder, fromFolder);
     }
 }

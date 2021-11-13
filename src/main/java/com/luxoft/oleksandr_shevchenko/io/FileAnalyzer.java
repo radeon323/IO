@@ -11,8 +11,6 @@ public class FileAnalyzer {
 
         String path = args[0];
         String word = args[1];
-//        String path = "story.txt";
-//        String word = "duck";
         byte[] content = readContent(path).toLowerCase().getBytes();
         byte[] wordArray = word.getBytes();
 
